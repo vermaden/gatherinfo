@@ -30,6 +30,10 @@ LANG=C
 UNAME=$( uname )
 
 __command() {
+  if [ ${#} -ne 0 ]
+  then
+    local PREFIX="${@} "
+  fi
   echo ${I}
   OUT="$( eval ${I} 2> /dev/null )"
   if [ ${?} -ne 0 ]
@@ -42,14 +46,14 @@ __command() {
   fi
   ID=$(( ${ID} + 1 ))
   cat >> ${OUTFILE} << __EOF
-    <a href='javascript:toggle(${ID})'># ${I}</a><br>
+    <a href='javascript:toggle(${ID})'>${PREFIX}# ${I}</a><br>
     <div class='off' id='id_${ID}'>
     <pre>
 __EOF
   echo "${OUT}" | sed -e s/'&'/'\&amp;'/g -e s/'<'/'\&lt;'/g -e s/'>'/'\&gt;'/g >> ${OUTFILE} 2>&1
   cat >> ${OUTFILE} << __EOF
     </pre>
-    <a href='javascript:toggle(${ID})'><b>COLLAPSE</b> # ${I}</a><br><br>
+    <a href='javascript:toggle(${ID})'><b>COLLAPSE</b> ${PREFIX}# ${I}</a><br><br>
     </div>
 __EOF
 }
@@ -110,6 +114,7 @@ case ${UNAME} in
   (FreeBSD)
     for I in \
       "top -d 1" \
+      "top -d 1 -o res" \
       "sockstat"
     do __command; done
     ;;
@@ -122,7 +127,7 @@ for I in \
   "pstree -A" \
   "pstree -A -a" \
   "lsof"
-do __command processes; done
+do __command; done
 
 # SYSTEM ----------------------------------------------------------------------
 echo "<br><b>system</b><br>" >> ${OUTFILE}
@@ -140,13 +145,19 @@ case ${UNAME} in
       "cat /etc/lsb-release" \
       "cat /etc/fedora-release" \
       "cat /etc/redhat-release" \
+      "cat /etc/sysconfig/rhn/systemid" \
       "cat /etc/SuSE-brand" \
       "cat /etc/SuSE-release" \
       "cat /etc/debian_version" \
       "cat /etc/slackware-version" \
       "cat /root/anaconda-ks.cfg" \
       "cat /etc/modprobe.conf" \
-      "cat /etc/modules.conf"
+      "cat /etc/modules.conf" \
+      "tail -n 99999 depmod.d/*" \
+      "cat /etc/sysconfig/selinux" \
+      "cat /etc/sysconfig/hwconf" \
+      "find / -type f -name core.[0-9]\* | xargs ls -lh" \
+      "find / -type f -name core.[0-9]\* | xargs file"
     do __command; done
     ;;
   (FreeBSD)
@@ -162,8 +173,8 @@ case ${UNAME} in
 esac
 for I in \
   "vmstat 1 5" \
-  "iostat -n 9999 -c 5" \
-  "iostat -n 9999 -c 5 -x" \
+  "iostat -c 1 5" \
+  "iostat -c 1 5 -x" \
   "cat /etc/motd" \
   "cat /etc/issue" \
   "cat /etc/security/limits.conf" \
@@ -184,6 +195,11 @@ for I in \
   "cat /var/log/Xorg.0.log" \
   "xwininfo -root -children" \
   "cat /usr/local/etc/X11/xorg.conf" \
+  "ls -ltr /var/log" \
+  "ls -ltr /var/log/*/*" \
+  "find /var/log -type f | xargs ls -ltr" \
+  "find /var/log -type f | xargs du -smc | sort -n -r " \
+  "find /var/run -type f | xargs tail -n 9999" \
   "uname -a " \
   "uptime" \
   "sysctl -a" \
@@ -231,6 +247,9 @@ for I in \
   "cat /etc/profile.env" \
   "cat /etc/zprofile" \
   "cat /etc/zshrc" \
+  "cat /etc/zlogin" \
+  "cat /etc/zlogout" \
+  "cat /etc/zshenv" \
   "ulimit -a" \
   "limits" \
   "tail -n 99999 /.profile" \
@@ -242,6 +261,7 @@ for I in \
   "tail -n 99999 /.tcshrc" \
   "tail -n 99999 /root/.profile" \
   "tail -n 99999 /root/.bash_profile" \
+  "tail -n 99999 /root/.bash_logout" \
   "tail -n 99999 /root/.bashrc" \
   "tail -n 99999 /root/.zshrc" \
   "tail -n 99999 /root/.zprofile" \
@@ -367,19 +387,23 @@ case ${UNAME} in
   (Linux)
     for I in \
       "cat /proc/cpuinfo" \
-      "cat /proc/cpuinfo | grep processor | wc -l" \
+      "grep -c proc /proc/cpuinfo" \
       "cat /proc/meminfo" \
       "cat /proc/swaps" \
       "cat /proc/partitions" \
       "cat /proc/interrupts" \
       "cat /proc/version" \
       "cat /proc/devices" \
+      "cat /proc/scsi/scsi" \
+      "cat /proc/scsi/sg/device_strs" \
+      "cat /proc/scsi/IBMtape" \
+      "cat /proc/scsi/IBMchanger" \
+      "find /dev/lin_tape -ls" \
       "ethtool" \
       "free -m" \
       "lshw" \
       "lspci" \
       "lspci -tv" \
-      "lspci -vvknnqq" \
       "lsdev" \
       "lscpu" \
       "lshal" \
@@ -414,7 +438,8 @@ case ${UNAME} in
     for I in \
       "runlevel" \
       "chkconfig --list" \
-      "cat /etc/modules.conf" \
+      "cat /etc/sysconfig/grub" \
+      "cat /etc/sysconfig/kernel" \
       "cat /etc/lilo.conf"
     do __command; done
     ;;
@@ -450,8 +475,18 @@ echo "<br><b>storage</b><br>" >> ${OUTFILE}
 case ${UNAME} in
   (Linux)
     for I in \
+      "find /dev/disk" \
+      "find /dev/mapper" \
+      "find /dev/mpath" \
+      "find /dev/tape" \
+      "find /dev/lin_tape" \
+      "cat /etc/lin_taped.conf" \
+      "find /dev/IBM*" \
+      "find /dev/cciss" \
       "multipath -l" \
-      "multipath -ll"
+      "multipath -ll" \
+      "cat /etc/hba.conf" \
+      "cat /etc/multipath.conf"
     do __command; done
     ;;
   (FreeBSD)
@@ -497,6 +532,7 @@ case ${UNAME} in
     for I in \
       "rpm -qa" \
       "yum list installed" \
+      "tail -n 9999 /etc/yum.repos.d/*" \
       "eix -I" \
       "dpkg --list"
     do __command; done
@@ -519,6 +555,17 @@ for I in \
   "ls -l /opt" \
   "ls -l /opt/*"
 do __command; done
+for I in \
+  "find / -type f -iname dsmserv.err | xargs tail -n 99999" \
+  "find / -type f -iname dsmserv.opt | xargs tail -n 99999" \
+  "find / -type f -iname volhist.dat | xargs tail -n 99999" \
+  "find / -type f -iname devconf.dat | xargs tail -n 99999" \
+  "find / -type f -iname logattr.chk | xargs tail -n 99999" \
+  "find / -type f -iname dsm.sys | xargs tail -n 99999" \
+  "find / -type f -iname dsm.opt | xargs tail -n 99999" \
+  "find / -type f -iname Tivoli_Storage_Manager_InstallLog.log | xargs tail -n 99999" \
+  "find / -type f -iname tsm.pwd"
+do __command TSM; done
 
 # PRINTING --------------------------------------------------------------------
 echo "<br><b>printing</b><br>" >> ${OUTFILE}
@@ -536,3 +583,35 @@ cat >> ${OUTFILE} << __EOF
 </body>
 </html>
 __EOF
+
+# du -mxS / | sort -n | tail -5
+# grep -i kill /var/log/messages |wc -l
+# mpstat 2 10
+# dstat --top-io --top-bio
+# python -V
+# perl -v
+# httpd -v or apache2 -v
+# java -version
+# mysql --version
+
+# https://github.com/BashtonLtd/whatswrong/blob/master/whatswrong
+# http://bhami.com/rosetta.html
+# http://www.unixporting.com/quickguide.html
+# http://unixguide.net/cgi-bin/unixguide.cgi
+
+# more /etc/release
+#
+#                           Oracle Solaris 11.1 SPARC
+# Copyright (c) 1983, 2012, Oracle and/or its affiliates.  All rights reserved.
+#                          Assembled 19 September 2012
+#
+# more /etc/cluster/release
+#
+#               Oracle Solaris Cluster 4.1 0.18.2 for Solaris 11 sparc
+# Copyright (c) 2000, 2012, Oracle and/or its affiliates. All rights reserved.
+
+# POSTFIX: postqueue -p
+# POSTFIX: qshape ALL
+# POSTFIX: qshape defer
+# POSTFIX: qshape deferred
+
