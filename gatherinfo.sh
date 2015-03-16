@@ -541,7 +541,7 @@ case ${UNAME} in
       "pkg_info" \
       "portaudit" \
       "pkg info" \
-      "pkg audit"
+      "pkg audit | tee /dev/null"
     do __command; done
     ;;
   (SunOS)
