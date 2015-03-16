@@ -153,7 +153,7 @@ case ${UNAME} in
       "cat /root/anaconda-ks.cfg" \
       "cat /etc/modprobe.conf" \
       "cat /etc/modules.conf" \
-      "tail -n 99999 depmod.d/*" \
+      "tail -n 1024 depmod.d/*" \
       "cat /etc/sysconfig/selinux" \
       "cat /etc/sysconfig/hwconf" \
       "find / -type f -name core.[0-9]\* | xargs ls -lh" \
@@ -178,7 +178,7 @@ for I in \
   "cat /etc/issue" \
   "cat /etc/security/limits.conf" \
   "cat /etc/ld.so.conf" \
-  "tail -n 99999 /etc/ld.so.conf.*/*" \
+  "tail -n 1024 /etc/ld.so.conf.*/*" \
   "cat /etc/make.conf" \
   "cat /etc/login.conf" \
   "cat /etc/rc.conf" \
@@ -189,7 +189,7 @@ for I in \
   "cat /etc/devfs.rules" \
   "cat /etc/wpa_supplicant.conf" \
   "cat /var/log/secure" \
-  "tail -n 99999 /etc/env.d/*/*" \
+  "tail -n 1024 /etc/env.d/*/*" \
   "cat /etc/X11/xorg.conf" \
   "cat /var/log/Xorg.0.log" \
   "xwininfo -root -children" \
@@ -198,7 +198,7 @@ for I in \
   "ls -ltr /var/log/*/*" \
   "find /var/log -type f | xargs ls -ltr" \
   "find /var/log -type f | xargs du -smc | sort -n -r " \
-  "find /var/run -type f | xargs tail -n 9999" \
+  "find /var/run -type f | xargs tail -n 1024" \
   "uname -a " \
   "uptime" \
   "sysctl -a" \
@@ -220,10 +220,10 @@ for I in \
   "cat /root/.bash_history" \
   "cat /root/.history" \
   "cat /root/.zhistory" \
-  "tail -n 99999 /home/*/.bash_history" \
-  "tail -n 99999 /home/*/.history" \
-  "tail -n 99999 /home/*/.zhistory" \
-  "tail -n 99999 /var/mail/*"
+  "tail -n 10240 /home/*/.bash_history" \
+  "tail -n 10240 /home/*/.history" \
+  "tail -n 10240 /home/*/.zhistory" \
+  "tail -n 1024 /var/mail/*"
 do __command; done
 
 # SHELLS ----------------------------------------------------------------------
@@ -251,28 +251,28 @@ for I in \
   "cat /etc/zshenv" \
   "ulimit -a" \
   "limits" \
-  "tail -n 99999 /.profile" \
-  "tail -n 99999 /.bash_profile" \
-  "tail -n 99999 /.bashrc" \
-  "tail -n 99999 /.zshrc" \
-  "tail -n 99999 /.zprofile" \
-  "tail -n 99999 /.cshrc" \
-  "tail -n 99999 /.tcshrc" \
-  "tail -n 99999 /root/.profile" \
-  "tail -n 99999 /root/.bash_profile" \
-  "tail -n 99999 /root/.bash_logout" \
-  "tail -n 99999 /root/.bashrc" \
-  "tail -n 99999 /root/.zshrc" \
-  "tail -n 99999 /root/.zprofile" \
-  "tail -n 99999 /root/.cshrc" \
-  "tail -n 99999 /root/.tcshrc" \
-  "tail -n 99999 /home/*/.profile" \
-  "tail -n 99999 /home/*/.bash_profile" \
-  "tail -n 99999 /home/*/.bashrc" \
-  "tail -n 99999 /home/*/.zshrc" \
-  "tail -n 99999 /home/*/.zprofile" \
-  "tail -n 99999 /home/*/.cshrc" \
-  "tail -n 99999 /home/*/.tcshrc"
+  "tail -n 10240 /.profile" \
+  "tail -n 10240 /.bash_profile" \
+  "tail -n 10240 /.bashrc" \
+  "tail -n 10240 /.zshrc" \
+  "tail -n 10240 /.zprofile" \
+  "tail -n 10240 /.cshrc" \
+  "tail -n 10240 /.tcshrc" \
+  "tail -n 10240 /root/.profile" \
+  "tail -n 10240 /root/.bash_profile" \
+  "tail -n 10240 /root/.bash_logout" \
+  "tail -n 10240 /root/.bashrc" \
+  "tail -n 10240 /root/.zshrc" \
+  "tail -n 10240 /root/.zprofile" \
+  "tail -n 10240 /root/.cshrc" \
+  "tail -n 10240 /root/.tcshrc" \
+  "tail -n 10240 /home/*/.profile" \
+  "tail -n 10240 /home/*/.bash_profile" \
+  "tail -n 10240 /home/*/.bashrc" \
+  "tail -n 10240 /home/*/.zshrc" \
+  "tail -n 10240 /home/*/.zprofile" \
+  "tail -n 10240 /home/*/.cshrc" \
+  "tail -n 10240 /home/*/.tcshrc"
 do __command; done
 
 # NETWORK ---------------------------------------------------------------------
@@ -292,7 +292,7 @@ case ${UNAME} in
       "cat /etc/sysconfig/iptables" \
       "cat /etc/sysconfig/network" \
       "cat /etc/network/interfaces" \
-      "tail -n 99999 /etc/sysconfig/network-scripts/ifcfg-*" \
+      "tail -n 1024 /etc/sysconfig/network-scripts/ifcfg-*" \
       "iptables -L -n -v"
     do __command; done
     ;;
@@ -304,7 +304,7 @@ case ${UNAME} in
       "ifconfig wlan0 list scan" \
       "ipfw show" \
       "ipfw pipe list" \
-      "tail -n 99999 /var/db/dhclient.leases.*" \
+      "tail -n 1024 /var/db/dhclient.leases.*" \
       "cat /etc/dhclient.conf"
     do __command; done
     ;;
@@ -319,9 +319,9 @@ for I in \
   "cat /etc/exports" \
   "cat /etc/zfs/exports" \
   "cat /etc/ppp/ppp.conf" \
-  "tail -n 99999 /var/log/ppp.log" \
-  "bzip2 -d /var/log/ppp.log.*.bz2 | tail -n 99999" \
-  "tail -n 99999 /etc/auto.*" \
+  "tail -n 1024 /var/log/ppp.log" \
+  "bzip2 -d /var/log/ppp.log.*.bz2 | tail -n 1024" \
+  "tail -n 1024 /etc/auto.*" \
   "netstat -r -n" \
   "netstat -r" \
   "netstat -s" \
@@ -346,17 +346,17 @@ for I in \
   "cat /etc/crontab" \
   "cat /etc/anacrontab" \
   "atq" \
-  "tail -n 99999 /var/log/cron" \
+  "tail -n 10240 /var/log/cron" \
   "bzip2 -d /var/log/cron.*.bz2 | tail -n 99999" \
   "cat /etc/logrotate.conf" \
   "cat /etc/newsyslog.conf" \
   "cat /etc/syslog.conf" \
-  "tail -n 99999 /etc/logrotate.d/*" \
-  "tail -n 99999 /etc/cron.*/*" \
-  "tail -n 99999 /var/log/maillog" \
-  "bzip2 -d /var/log/maillog.*.bz2 | tail -n 99999" \
-  "tail -n 99999 /var/cron/tabs/*" \
-  "tail -n 99999 /etc/periodic/*/*" \
+  "tail -n 1024 /etc/logrotate.d/*" \
+  "tail -n 1024 /etc/cron.*/*" \
+  "tail -n 1024 /var/log/maillog" \
+  "bzip2 -d /var/log/maillog.*.bz2 | tail -n 1024" \
+  "tail -n 1024 /var/cron/tabs/*" \
+  "tail -n 1024 /etc/periodic/*/*" \
   "cat /etc/periodic.conf"
 do __command; done
 
@@ -425,8 +425,8 @@ case ${UNAME} in
 esac
 for I in \
   "dmesg" \
-  "tail -n 99999 /var/log/messages" \
-  "bzip2 -d /var/log/messages.*.bz2 | tail -n 99999" \
+  "tail -n 1024 /var/log/messages" \
+  "bzip2 -d /var/log/messages.*.bz2 | tail -n 1024" \
   "dmidecode"
 do __command; done
 
@@ -463,10 +463,10 @@ for I in \
   "ls -l /etc/rc4.d/*" \
   "ls -l /etc/rc5.d/*" \
   "ls -l /etc/rc6.d/*" \
-  "tail -n 99999 /etc/init.d/*" \
-  "tail -n 99999 /etc/rc.d/*" \
+  "tail -n 10240 /etc/init.d/*" \
+  "tail -n 10240 /etc/rc.d/*" \
   "ls -l /usr/local/etc/rc.d/*" \
-  "tail -n 99999 /usr/local/etc/rc.d/*"
+  "tail -n 10240 /usr/local/etc/rc.d/*"
 do __command; done
 
 # STORAGE ---------------------------------------------------------------------
@@ -531,7 +531,7 @@ case ${UNAME} in
     for I in \
       "rpm -qa" \
       "yum list installed" \
-      "tail -n 9999 /etc/yum.repos.d/*" \
+      "tail -n 1024 /etc/yum.repos.d/*" \
       "eix -I" \
       "dpkg --list"
     do __command; done
@@ -555,14 +555,14 @@ for I in \
   "ls -l /opt/*"
 do __command; done
 for I in \
-  "find / -type f -iname dsmserv.err | xargs tail -n 99999" \
-  "find / -type f -iname dsmserv.opt | xargs tail -n 99999" \
-  "find / -type f -iname volhist.dat | xargs tail -n 99999" \
-  "find / -type f -iname devconf.dat | xargs tail -n 99999" \
-  "find / -type f -iname logattr.chk | xargs tail -n 99999" \
-  "find / -type f -iname dsm.sys | xargs tail -n 99999" \
-  "find / -type f -iname dsm.opt | xargs tail -n 99999" \
-  "find / -type f -iname Tivoli_Storage_Manager_InstallLog.log | xargs tail -n 99999" \
+  "find / -type f -iname dsmserv.err | xargs tail -n 10240" \
+  "find / -type f -iname dsmserv.opt | xargs tail -n 10240" \
+  "find / -type f -iname volhist.dat | xargs tail -n 10240" \
+  "find / -type f -iname devconf.dat | xargs tail -n 10240" \
+  "find / -type f -iname logattr.chk | xargs tail -n 10240" \
+  "find / -type f -iname dsm.sys | xargs tail -n 10240" \
+  "find / -type f -iname dsm.opt | xargs tail -n 10240" \
+  "find / -type f -iname Tivoli_Storage_Manager_InstallLog.log | xargs tail -n 10240" \
   "find / -type f -iname tsm.pwd"
 do __command TSM; done
 
