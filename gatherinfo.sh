@@ -173,8 +173,7 @@ case ${UNAME} in
 esac
 for I in \
   "vmstat 1 5" \
-  "iostat -c 1 5" \
-  "iostat -c 1 5 -x" \
+  "iostat 1 5" \
   "cat /etc/motd" \
   "cat /etc/issue" \
   "cat /etc/security/limits.conf" \
